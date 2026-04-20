@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Nature-inspired portfolio — Design System
+   Light: soft neutrals + warm tones (sand, clay, sage)
+   Dark : olive-green based (no pure black)
+   All colors HSL.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    /* Surfaces */
+    --background: 38 33% 96%;          /* warm cream */
+    --foreground: 90 12% 16%;          /* deep olive-ink */
+
+    --card: 38 40% 98%;
+    --card-foreground: 90 12% 16%;
+
+    --popover: 38 40% 98%;
+    --popover-foreground: 90 12% 16%;
+
+    /* Brand — warm sage */
+    --primary: 95 22% 38%;             /* sage green */
+    --primary-foreground: 38 40% 98%;
+    --primary-glow: 88 35% 62%;
+
+    /* Warm clay accent */
+    --secondary: 26 45% 88%;
+    --secondary-foreground: 22 35% 24%;
+
+    --muted: 38 22% 90%;
+    --muted-foreground: 90 8% 38%;
+
+    --accent: 22 60% 65%;              /* terracotta */
+    --accent-foreground: 38 40% 98%;
+
+    --destructive: 8 70% 52%;
+    --destructive-foreground: 38 40% 98%;
+
+    --border: 38 18% 84%;
+    --input: 38 18% 84%;
+    --ring: 95 22% 38%;
+
+    --radius: 0.85rem;
+
+    /* Custom palette tokens */
+    --sand: 38 33% 92%;
+    --clay: 22 50% 70%;
+    --moss: 95 22% 32%;
+    --bark: 28 25% 22%;
+    --leaf: 88 30% 55%;
+
+    /* Gradients */
+    --gradient-sky: linear-gradient(180deg, hsl(38 50% 96%) 0%, hsl(38 33% 92%) 50%, hsl(95 25% 88%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(22 60% 75%) 0%, hsl(38 55% 82%) 100%);
+    --gradient-forest: linear-gradient(135deg, hsl(95 22% 38%) 0%, hsl(88 30% 55%) 100%);
+    --gradient-screen: linear-gradient(135deg, hsl(38 40% 98%) 0%, hsl(26 45% 94%) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 10px 30px -12px hsl(90 15% 20% / 0.18);
+    --shadow-glow: 0 20px 60px -20px hsl(95 22% 38% / 0.35);
+    --shadow-screen: 0 30px 80px -30px hsl(90 25% 12% / 0.45);
+
+    /* Motion */
+    --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-base: 320ms var(--ease-out-soft);
+
+    --sidebar-background: 38 33% 96%;
+    --sidebar-foreground: 90 12% 16%;
+    --sidebar-primary: 95 22% 38%;
+    --sidebar-primary-foreground: 38 40% 98%;
+    --sidebar-accent: 38 22% 90%;
+    --sidebar-accent-foreground: 90 12% 16%;
+    --sidebar-border: 38 18% 84%;
+    --sidebar-ring: 95 22% 38%;
+  }
+
+  .dark {
+    /* Olive-green dark theme — never pure black */
+    --background: 80 14% 9%;           /* deep olive */
+    --foreground: 60 18% 92%;          /* parchment */
+
+    --card: 82 16% 12%;
+    --card-foreground: 60 18% 92%;
+
+    --popover: 82 16% 12%;
+    --popover-foreground: 60 18% 92%;
+
+    --primary: 88 32% 60%;             /* glowing leaf */
+    --primary-foreground: 80 20% 10%;
+    --primary-glow: 90 40% 70%;
+
+    --secondary: 80 12% 18%;
+    --secondary-foreground: 60 18% 92%;
+
+    --muted: 80 12% 16%;
+    --muted-foreground: 60 10% 68%;
+
+    --accent: 28 55% 62%;              /* muted terracotta */
+    --accent-foreground: 80 20% 10%;
+
+    --destructive: 8 60% 48%;
+    --destructive-foreground: 60 18% 92%;
+
+    --border: 80 12% 20%;
+    --input: 80 12% 20%;
+    --ring: 88 32% 60%;
+
+    --sand: 80 12% 16%;
+    --clay: 28 40% 50%;
+    --moss: 88 32% 60%;
+    --bark: 60 18% 92%;
+    --leaf: 95 30% 50%;
+
+    --gradient-sky: linear-gradient(180deg, hsl(80 16% 11%) 0%, hsl(82 18% 9%) 60%, hsl(95 20% 12%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(28 40% 35%) 0%, hsl(38 25% 25%) 100%);
+    --gradient-forest: linear-gradient(135deg, hsl(88 32% 50%) 0%, hsl(95 30% 35%) 100%);
+    --gradient-screen: linear-gradient(135deg, hsl(82 18% 14%) 0%, hsl(80 14% 11%) 100%);
+
+    --shadow-soft: 0 10px 30px -12px hsl(0 0% 0% / 0.55);
+    --shadow-glow: 0 20px 60px -20px hsl(88 40% 50% / 0.35);
+    --shadow-screen: 0 30px 80px -30px hsl(0 0% 0% / 0.7);
+
+    --sidebar-background: 80 14% 9%;
+    --sidebar-foreground: 60 18% 92%;
+    --sidebar-primary: 88 32% 60%;
+    --sidebar-primary-foreground: 80 20% 10%;
+    --sidebar-accent: 80 12% 16%;
+    --sidebar-accent-foreground: 60 18% 92%;
+    --sidebar-border: 80 12% 20%;
+    --sidebar-ring: 88 32% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "cv11";
+    background-image: radial-gradient(1200px 600px at 80% -10%, hsl(var(--primary) / 0.08), transparent 60%),
+                      radial-gradient(900px 500px at -10% 30%, hsl(var(--accent) / 0.08), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.25);
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  .glass {
+    background: hsl(var(--card) / 0.65);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid hsl(var(--border) / 0.6);
+  }
+
+  .text-gradient-forest {
+    background: var(--gradient-forest);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-gradient-warm {
+    background: var(--gradient-warm);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .browser-shadow {
+    box-shadow: var(--shadow-screen);
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .perspective-1000 { perspective: 1000px; }
+  .preserve-3d { transform-style: preserve-3d; }
+}
