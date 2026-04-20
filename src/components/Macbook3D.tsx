@@ -5,6 +5,7 @@ import {
   Html,
   ContactShadows,
   RoundedBox,
+  Text,
 } from "@react-three/drei";
 import * as THREE from "three";
 import { BrowserScreen } from "./BrowserScreen";
@@ -130,6 +131,111 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
     const startX = -kbW / 2 + kw / 2;
     const startZ = -kbD / 2 + kd / 2;
 
+    const KEY_LABELS = [
+      [
+        "esc",
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F11",
+        "F12",
+        "F13",
+        "⏏",
+      ],
+      [
+        "~",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "-",
+        "=",
+        "del",
+        "",
+      ],
+      [
+        "tab",
+        "Q",
+        "W",
+        "E",
+        "R",
+        "T",
+        "Y",
+        "U",
+        "I",
+        "O",
+        "P",
+        "[",
+        "]",
+        "\\",
+        "",
+      ],
+      [
+        "caps",
+        "A",
+        "S",
+        "D",
+        "F",
+        "G",
+        "H",
+        "J",
+        "K",
+        "L",
+        ";",
+        "'",
+        "return",
+        "",
+        "",
+      ],
+      [
+        "shift",
+        "Z",
+        "X",
+        "C",
+        "V",
+        "B",
+        "N",
+        "M",
+        ",",
+        ".",
+        "/",
+        "shift",
+        "",
+        "",
+        "",
+      ],
+      [
+        "fn",
+        "ctrl",
+        "opt",
+        "cmd",
+        "space",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "cmd",
+        "opt",
+        "◄",
+        "►",
+      ],
+    ];
+
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         // Spacebar logic
@@ -144,6 +250,7 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
                   startZ + r * (kd + gap),
                 ],
                 args: [spaceW, 0.015, kd],
+                label: "",
               });
             }
             continue;
@@ -154,6 +261,9 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
         const isF = r === 0;
         const actualKd = isF ? kd * 0.6 : kd;
         const offsetZ = isF ? -kd * 0.2 : 0;
+
+        const label = KEY_LABELS[r] && KEY_LABELS[r][c] ? KEY_LABELS[r][c] : "";
+
         list.push({
           pos: [
             startX + c * (kw + gap),
@@ -161,6 +271,7 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
             startZ + r * (kd + gap) + offsetZ,
           ],
           args: [kw, 0.015, actualKd],
+          label,
         });
       }
     }
@@ -240,6 +351,23 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
             material={neoGreenKey}
           >
             <boxGeometry args={k.args as [number, number, number]} />
+            {k.label && (
+              <Text
+                position={[
+                  -k.args[0] / 2 + 0.015,
+                  k.args[1] / 2 + 0.001,
+                  k.args[2] / 2 - 0.015,
+                ]}
+                rotation={[-Math.PI / 2, 0, 0]}
+                fontSize={k.label.length > 2 ? 0.025 : 0.035}
+                color="#000"
+                anchorX="left"
+                anchorY="bottom"
+              >
+                <meshBasicMaterial color={[2, 2, 2]} toneMapped={false} />
+                {k.label}
+              </Text>
+            )}
           </mesh>
         ))}
       </group>
@@ -275,34 +403,41 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
         />
 
         {/* Lid Inner Bezel */}
-        <RoundedBox
+        {/* <RoundedBox
           material={glass}
-          args={[baseW * 0.96, lidThickness * 1, baseD * 0.96]}
+          args={[baseW * 0.98, lidThickness * 1, baseD * 0.98]}
           radius={0.02}
           smoothness={4}
           position={[0, baseD / 2, 0.001]}
           rotation={[Math.PI / 2, 0, 0]}
-        />
+        /> */}
 
         {/* Browser Screen */}
         <Html
           transform
           occlude={false}
-          position={[0, baseD / 2, 0.01]}
-          distanceFactor={1.2}
+          position={[0, baseD / 2, 0.012]}
+          distanceFactor={1.34}
           style={{ pointerEvents: openAmount > 0.7 ? "auto" : "none" }}
         >
           <div
             style={{
-              width: "1080px",
-              height: "720px",
-              borderRadius: "12px",
+              width: "1060px",
+              height: "700px",
+              borderRadius: "8px",
               overflow: "hidden",
-              border: "2px solid #000",
+              border: "12px solid #000",
               background: "#000",
+              position: "relative",
             }}
-            className="browser-shadow"
+            className="browser-shadow shadow-[0_0_20px_rgba(0,0,0,0.5)]"
           >
+            {/* The Notch */}
+            <div
+              className="absolute top-0 left-1/2 -translate-x-1/2 w-[140px] h-[14px] bg-[#000] rounded-b-[14px] z-[9999]"
+              style={{ boxShadow: "inset 0 -1px 3px rgba(255,255,255,0.1)" }}
+            />
+
             <BrowserScreen active={activeSection} />
           </div>
         </Html>
