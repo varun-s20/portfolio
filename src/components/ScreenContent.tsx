@@ -11,13 +11,13 @@ import {
   Briefcase,
   Mail,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 interface Props {
   active: SectionId;
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -28,7 +28,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
@@ -109,7 +109,7 @@ function Home() {
             "radial-gradient(600px 300px at 80% 20%, hsl(var(--primary) / 0.18), transparent 60%), radial-gradient(500px 280px at 10% 80%, hsl(var(--accent) / 0.18), transparent 60%)",
         }}
       />
-      
+
       <div className="relative z-10 w-full flex flex-col items-start mt-8 sm:mt-0">
         <motion.div
           variants={itemVariants}
@@ -124,7 +124,10 @@ function Home() {
           variants={itemVariants}
           className="font-display text-5xl sm:text-[5rem] lg:text-[6rem] font-bold tracking-[-0.04em] leading-[1.05] mb-6 text-foreground"
         >
-          Crafting <span className="text-gradient-forest italic font-serif">digital</span>
+          Crafting{" "}
+          <span className="text-gradient-forest italic font-serif">
+            digital
+          </span>
           <br className="hidden sm:block" /> experiences that
           <br className="hidden sm:block" /> connect & convert.
         </motion.h1>
@@ -133,7 +136,9 @@ function Home() {
           variants={itemVariants}
           className="max-w-xl text-base sm:text-lg text-muted-foreground mb-10 leading-relaxed font-medium"
         >
-          Senior UI/UX Designer & Frontend Developer. I build immersive, high-performance web applications using React, Tailwind, and Framer Motion to elevate brands and drive engagement.
+          Senior UI/UX Designer & Frontend Developer. I build immersive,
+          high-performance web applications using React, Tailwind, and Framer
+          Motion to elevate brands and drive engagement.
         </motion.p>
 
         <motion.div
@@ -159,7 +164,7 @@ function Home() {
         </motion.div>
       </div>
 
-      <motion.div 
+      <motion.div
         variants={itemVariants}
         className="absolute bottom-10 left-6 sm:left-14 flex items-center gap-3 text-xs text-muted-foreground font-mono font-medium tracking-wide"
       >
@@ -183,46 +188,68 @@ function About() {
               {" "}
               design, motion, and engineering
             </span>
-            . Over the last 7 years, I've transformed complex requirements into seamless, intuitive interfaces that people love to use.
+            . Over the last 7 years, I've transformed complex requirements into
+            seamless, intuitive interfaces that people love to use.
           </p>
           <p>
-            My approach focuses on combining robust structural components with fluid micro-interactions. Whether it's architecting a scalable design system or perfecting a hover state, I care deeply about the details that make software feel <span className="italic text-foreground">premium</span>.
+            My approach focuses on combining robust structural components with
+            fluid micro-interactions. Whether it's architecting a scalable
+            design system or perfecting a hover state, I care deeply about the
+            details that make software feel{" "}
+            <span className="italic text-foreground">premium</span>.
           </p>
           <p>
-            When I'm not pushing pixels or wrangling React components, I'm experimenting with Three.js, exploring minimalist architecture, or brewing the perfect pour-over coffee.
+            When I'm not pushing pixels or wrangling React components, I'm
+            experimenting with Three.js, exploring minimalist architecture, or
+            brewing the perfect pour-over coffee.
           </p>
         </div>
         <aside className="lg:col-span-2 rounded-3xl border border-border/80 bg-card/40 backdrop-blur-md p-6 sm:p-8 space-y-5 shadow-sm hover:shadow-soft transition-shadow hover:bg-card/60 hover:border-primary/30">
           <div className="flex items-center gap-3 pb-4 border-b border-border/50">
             <div className="h-14 w-14 rounded-full bg-gradient-forest p-[2px]">
-               <div className="h-full w-full bg-background rounded-full border-2 border-background overflow-hidden relative">
-                 <div className="absolute inset-0 bg-primary/10"></div>
-                 {/* Placeholder for avatar */}
-                 <div className="absolute bottom-0 inset-x-0 h-1/2 bg-primary/30 rounded-t-full"></div>
-                 <div className="absolute top-2 left-1/2 -translate-x-1/2 w-6 h-6 bg-primary/40 rounded-full"></div>
-               </div>
+              <div className="h-full w-full bg-background rounded-full border-2 border-background overflow-hidden relative">
+                <div className="absolute inset-0 bg-primary/10"></div>
+                {/* Placeholder for avatar */}
+                <div className="absolute bottom-0 inset-x-0 h-1/2 bg-primary/30 rounded-t-full"></div>
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-6 h-6 bg-primary/40 rounded-full"></div>
+              </div>
             </div>
             <div>
               <div className="font-semibold text-foreground text-lg">Varun</div>
-              <div className="text-sm text-muted-foreground">Product Engineer</div>
+              <div className="text-sm text-muted-foreground">
+                Product Engineer
+              </div>
             </div>
           </div>
           <div className="space-y-4 pt-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="flex items-center gap-2 text-muted-foreground font-medium"><MapPin className="h-4 w-4" /> Location</span>
-              <span className="text-foreground font-semibold">Lyon, France</span>
+              <span className="flex items-center gap-2 text-muted-foreground font-medium">
+                <MapPin className="h-4 w-4" /> Location
+              </span>
+              <span className="text-foreground font-semibold">
+                Lyon, France
+              </span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="flex items-center gap-2 text-muted-foreground font-medium"><Briefcase className="h-4 w-4" /> Experience</span>
+              <span className="flex items-center gap-2 text-muted-foreground font-medium">
+                <Briefcase className="h-4 w-4" /> Experience
+              </span>
               <span className="text-foreground font-semibold">7+ Years</span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="flex items-center gap-2 text-muted-foreground font-medium"><Sparkles className="h-4 w-4" /> Core Focus</span>
-              <span className="text-foreground font-semibold">UI Engineering</span>
+              <span className="flex items-center gap-2 text-muted-foreground font-medium">
+                <Sparkles className="h-4 w-4" /> Core Focus
+              </span>
+              <span className="text-foreground font-semibold">
+                UI Engineering
+              </span>
             </div>
           </div>
-          <a href="#contact" className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 bg-foreground text-background rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity active:scale-[0.98]">
-             <Mail className="h-4 w-4" /> Get in touch
+          <a
+            href="#contact"
+            className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 bg-foreground text-background rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity active:scale-[0.98]"
+          >
+            <Mail className="h-4 w-4" /> Get in touch
           </a>
         </aside>
       </div>
@@ -277,7 +304,7 @@ function Experience() {
             {/* Timeline dot */}
             <span className="absolute -left-[11px] top-1.5 h-5 w-5 rounded-full bg-background border-[3px] border-border group-hover:border-primary transition-colors duration-300 z-10" />
             <span className="absolute -left-[5px] top-[10px] h-2 w-2 rounded-full bg-primary opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300 z-20" />
-            
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
               <h3 className="font-display text-2xl font-bold text-foreground">
                 {e.role}{" "}
@@ -295,12 +322,14 @@ function Experience() {
           </motion.div>
         ))}
       </div>
-      <motion.div 
+      <motion.div
         whileHover={{ x: 5 }}
         className="mt-8 flex items-center gap-3 text-sm text-foreground font-semibold cursor-pointer group w-fit"
       >
-        <Briefcase className="h-5 w-5 text-primary" /> 
-        <span className="border-b border-foreground/30 group-hover:border-primary transition-colors pb-0.5">View full résumé</span>
+        <Briefcase className="h-5 w-5 text-primary" />
+        <span className="border-b border-foreground/30 group-hover:border-primary transition-colors pb-0.5">
+          View full résumé
+        </span>
         <ArrowRight className="h-4 w-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
       </motion.div>
     </SectionShell>
@@ -320,16 +349,19 @@ function Projects() {
             className="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 sm:gap-10 rounded-3xl border border-border/80 bg-card/40 backdrop-blur-sm p-6 sm:p-10 hover:border-primary/50 hover:bg-card/80 hover:shadow-soft transition-all duration-300 overflow-hidden"
           >
             {/* Subtle dynamic background glow */}
-            <div 
+            <div
               className="absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-700 pointer-events-none"
               style={{ backgroundColor: `hsl(var(--${p.accent}))` }}
             />
-            
+
             <div className="relative z-10 w-full">
               <div className="flex items-center gap-3 mb-4">
-                <div 
+                <div
                   className="h-2.5 w-2.5 rounded-full shadow-sm"
-                  style={{ backgroundColor: `hsl(var(--${p.accent}))`, boxShadow: `0 0 12px hsl(var(--${p.accent}))` }} 
+                  style={{
+                    backgroundColor: `hsl(var(--${p.accent}))`,
+                    boxShadow: `0 0 12px hsl(var(--${p.accent}))`,
+                  }}
                 />
                 <div className="text-[11px] uppercase tracking-[0.15em] text-muted-foreground font-bold font-mono bg-background/50 px-2 py-0.5 rounded-md border border-border/50">
                   {p.tag}
@@ -342,7 +374,7 @@ function Projects() {
                 {p.blurb}
               </div>
             </div>
-            
+
             <div className="relative z-10 flex-shrink-0 mt-2 sm:mt-0 bg-background rounded-full p-4 sm:p-5 border border-border group-hover:border-primary/50 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-lg transition-all duration-300">
               <ArrowUpRight className="h-6 w-6 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -360,23 +392,34 @@ function Contact() {
         <div className="lg:col-span-2 flex flex-col justify-between">
           <div>
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8">
-              Whether you have a complex web application to build, a 3D interface to prototype, or just want to chat about the future of front-end — my inbox is always open.
+              Whether you have a complex web application to build, a 3D
+              interface to prototype, or just want to chat about the future of
+              front-end — my inbox is always open.
             </p>
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                 <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                   <Mail className="h-5 w-5" />
-                 </div>
-                 <div>
-                   <div className="text-sm font-semibold text-foreground mb-1">Email directly</div>
-                   <a href="mailto:hello@varun.dev" className="text-muted-foreground hover:text-primary transition-colors">hello@varun.dev</a>
-                 </div>
+                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-foreground mb-1">
+                    Email directly
+                  </div>
+                  <a
+                    href="mailto:hello@varun.dev"
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    hello@varun.dev
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-          
+
           <div className="mt-12 sm:mt-auto pt-8 border-t border-border/60">
-            <div className="text-sm font-semibold text-foreground mb-4">Connect elsewhere</div>
+            <div className="text-sm font-semibold text-foreground mb-4">
+              Connect elsewhere
+            </div>
             <div className="flex gap-3">
               {[
                 { Icon: Github, href: "#", name: "GitHub" },
@@ -404,4 +447,3 @@ function Contact() {
     </SectionShell>
   );
 }
-

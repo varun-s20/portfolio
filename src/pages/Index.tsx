@@ -155,7 +155,7 @@ const Index = () => {
             )}
             {storyProgress >= 0.25 && storyProgress < 0.5 && (
               <div className="bg-black/70 backdrop-blur-sm text-white px-6 py-3 rounded-lg text-lg sm:text-xl max-w-lg text-center animate-in fade-in zoom-in duration-300 pointer-events-auto">
-                Let me close this for you and open up my portfolio site.
+                Was building my portfolio, wanna see?
               </div>
             )}
           </div>

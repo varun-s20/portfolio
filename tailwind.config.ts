@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -12,9 +17,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Fraunces"', 'ui-serif', 'Georgia', 'serif'],
-        sans: ['"Inter"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        display: ['"Fraunces"', "ui-serif", "Georgia", "serif"],
+        sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -100,15 +105,15 @@ export default {
           "0%": { transform: "scale(0.96)", opacity: "0" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
-        "float": {
+        float: {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-8px)" },
         },
-        "shimmer": {
+        shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
-        "blink": {
+        blink: {
           "0%, 50%, 100%": { opacity: "1" },
           "25%, 75%": { opacity: "0" },
         },
@@ -118,9 +123,9 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.6s var(--ease-out-soft) both",
         "scale-in": "scale-in 0.4s var(--ease-out-soft) both",
-        "float": "float 6s ease-in-out infinite",
-        "shimmer": "shimmer 3s linear infinite",
-        "blink": "blink 1.2s infinite",
+        float: "float 6s ease-in-out infinite",
+        shimmer: "shimmer 3s linear infinite",
+        blink: "blink 1.2s infinite",
       },
     },
   },
