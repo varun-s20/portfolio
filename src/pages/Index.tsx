@@ -12,23 +12,26 @@ const MacbookCanvas = lazy(() =>
  * --------------------
  * The MacBook is the entire site. It's pinned (sticky) for the whole journey:
  *
- *   [ INTRO  ][ HOME ][ ABOUT ][ SKILLS ][ EXPERIENCE ][ PROJECTS ][ CONTACT ]
+ *   [ INTRO ][ STORY ][ HOME ][ ABOUT ][ SKILLS ][ EXPERIENCE ][ PROJECTS ][ CONTACT ]
  *
  * - INTRO slice  : lid animates from half-closed → fully open
+ * - STORY slice  : captions appear outside, screen animation plays (VSC -> Chrome)
  * - SECTION slice: one slice per section. When the user is inside a slice,
  *                  the corresponding page renders inside the MacBook screen
  *                  and the URL bar updates.
  * Each slice = 1 viewport of scroll, so the user has time to read each page.
  */
 const INTRO_SLICES = 1; // intro takes 1 viewport
+const STORY_SLICES = 2; // story sequence takes 2 viewports
 const SECTION_SLICES = 1; // each section takes 1 viewport
 
 const Index = () => {
   const stageRef = useRef<HTMLDivElement>(null);
   const [openAmount, setOpenAmount] = useState(0);
+  const [storyProgress, setStoryProgress] = useState(0);
   const [activeSection, setActiveSection] = useState<SectionId>("home");
 
-  const totalSlices = INTRO_SLICES + SECTIONS.length * SECTION_SLICES;
+  const totalSlices = INTRO_SLICES + STORY_SLICES + SECTIONS.length * SECTION_SLICES;
 
   useEffect(() => {
     const onScroll = () => {
@@ -47,11 +50,18 @@ const Index = () => {
       const open = Math.min(sliceProgress / INTRO_SLICES, 1);
       setOpenAmount(open);
 
+      // Story Progress (0 to 1 over the 2 STORY_SLICES)
+      let sp = 0;
+      if (sliceProgress > INTRO_SLICES) {
+        sp = Math.min((sliceProgress - INTRO_SLICES) / STORY_SLICES, 1);
+      }
+      setStoryProgress(sp);
+
       // Section: index 0..SECTIONS.length-1
-      if (sliceProgress < INTRO_SLICES) {
-        setActiveSection("home"); // show home page while opening
+      if (sliceProgress < INTRO_SLICES + STORY_SLICES) {
+        setActiveSection("home"); // keep home active during story
       } else {
-        const sectionFloat = (sliceProgress - INTRO_SLICES) / SECTION_SLICES;
+        const sectionFloat = (sliceProgress - (INTRO_SLICES + STORY_SLICES)) / SECTION_SLICES;
         const idx = Math.min(Math.floor(sectionFloat), SECTIONS.length - 1);
         setActiveSection(SECTIONS[idx].id);
       }
@@ -76,7 +86,7 @@ const Index = () => {
       if (!el) return;
       const total = el.offsetHeight - window.innerHeight;
       // Middle of the slice for this section
-      const sliceCenter = INTRO_SLICES + idx * SECTION_SLICES + SECTION_SLICES * 0.5;
+      const sliceCenter = INTRO_SLICES + STORY_SLICES + idx * SECTION_SLICES + SECTION_SLICES * 0.5;
       const ratio = sliceCenter / totalSlices;
       const top = el.offsetTop + total * ratio;
       window.scrollTo({ top, behavior: "smooth" });
@@ -91,7 +101,7 @@ const Index = () => {
 
       {/* The ENTIRE site is one tall scroll stage.
           The MacBook lives in a sticky container and stays pinned the whole time.
-          Stage height = (intro + every section) × 1 viewport each. */}
+          Stage height = (intro + story + every section) × 1 viewport each. */}
       <section
         ref={stageRef}
         className="relative"
@@ -116,7 +126,7 @@ const Index = () => {
                 </div>
               }
             >
-              <MacbookCanvas openAmount={openAmount} activeSection={activeSection} />
+              <MacbookCanvas openAmount={openAmount} activeSection={activeSection} storyProgress={storyProgress} />
             </Suspense>
           </div>
 
@@ -136,13 +146,31 @@ const Index = () => {
             </div>
           </div>
 
+          {/* YouTube-style center captions */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-[20%] z-20 flex justify-center">
+            {storyProgress > 0 && storyProgress < 0.25 && (
+              <div className="bg-black/70 backdrop-blur-sm text-white px-6 py-3 rounded-lg text-lg sm:text-xl max-w-lg text-center animate-in fade-in zoom-in duration-300 pointer-events-auto">
+                Oh hi, didn't see you there.
+              </div>
+            )}
+            {storyProgress >= 0.25 && storyProgress < 0.5 && (
+              <div className="bg-black/70 backdrop-blur-sm text-white px-6 py-3 rounded-lg text-lg sm:text-xl max-w-lg text-center animate-in fade-in zoom-in duration-300 pointer-events-auto">
+                Let me close this for you and open up my portfolio site.
+              </div>
+            )}
+          </div>
+
           {/* Bottom HUD — opening % during intro, then segmented progress */}
           <div className="pointer-events-none absolute bottom-6 left-0 right-0 z-30 flex justify-center">
-            <div className="glass rounded-full px-4 py-2 flex items-center gap-3 shadow-soft">
+            <div className="glass rounded-full px-4 py-2 flex items-center gap-3 shadow-soft pointer-events-auto">
               <Leaf className="h-3.5 w-3.5 text-primary" />
               {openAmount < 1 ? (
                 <span className="font-mono text-xs text-muted-foreground">
                   Opening · {Math.round(openAmount * 100)}%
+                </span>
+              ) : storyProgress > 0 && storyProgress < 1 ? (
+                <span className="font-mono text-xs text-muted-foreground">
+                  Loading Experience · {Math.round(storyProgress * 100)}%
                 </span>
               ) : (
                 <div className="flex items-center gap-1.5">
@@ -165,21 +193,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Slim footer — appears only after the stage finishes */}
-      {/* <footer className="relative z-10 border-t border-border/60 bg-card/40 backdrop-blur-sm">
-        <div className="container py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Leaf className="h-4 w-4 text-primary" />
-            <span>© {new Date().getFullYear()} Varun Singh · Built with care.</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <a href="#about" className="hover:text-foreground transition-colors">About</a>
-            <a href="#projects" className="hover:text-foreground transition-colors">Projects</a>
-            <a href="#contact" className="hover:text-foreground transition-colors">Contact</a>
-          </div>
-        </div>
-      </footer> */}
     </div>
   );
 };

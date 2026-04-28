@@ -12,19 +12,136 @@ import {
   Bluetooth,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Star,
 } from "lucide-react";
 
 interface Props {
   active: SectionId;
+  storyProgress?: number;
 }
+
+const VSCodeWindow = ({ style }: { style: React.CSSProperties }) => (
+  <div style={style} className="absolute w-[800px] h-[520px] left-[130px] top-[40px] bg-[#1e1e1e] flex flex-col rounded-xl shadow-2xl border border-[#3c3c3c] z-30 overflow-hidden transform origin-bottom-left transition-all duration-75">
+    <div className="h-9 bg-[#323233] flex items-center justify-center relative flex-none text-[#cccccc] text-[13px] border-b border-[#1e1e1e]">
+      <div className="absolute left-4 flex gap-2">
+        <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]"></div>
+        <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]"></div>
+        <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]"></div>
+      </div>
+      portfolio - Visual Studio Code
+    </div>
+    <div className="flex-1 flex overflow-hidden">
+      <div className="w-12 bg-[#333333] flex flex-col items-center py-4 gap-6 text-[#858585] flex-none">
+        {/* Mockup icons */}
+        <div className="w-6 h-6 rounded-sm border-2 border-current opacity-80"></div>
+        <div className="w-6 h-6 rounded-sm border-2 border-current opacity-40"></div>
+        <div className="w-6 h-6 rounded-sm border-2 border-current opacity-40"></div>
+      </div>
+      <div className="w-48 bg-[#252526] border-r border-[#3c3c3c] p-4 text-[#cccccc] text-[13px] flex-none font-sans">
+        <div className="font-semibold text-[11px] tracking-widest mb-4">EXPLORER</div>
+        <div className="flex items-center gap-1 font-bold text-[#cccccc]"><ChevronDown className="w-3 h-3"/> portfolio</div>
+        <div className="pl-4 mt-2 flex items-center gap-1 text-[#4facfe]"><ChevronDown className="w-3 h-3"/> src</div>
+        <div className="pl-8 mt-1 flex items-center gap-1 text-[#cccccc]"><ChevronDown className="w-3 h-3"/> components</div>
+        <div className="pl-12 mt-1 text-[#e1ad4c] bg-[#37373d] py-0.5 px-1 rounded-sm border border-[#3c3c3c]">Macbook3D.tsx</div>
+        <div className="pl-12 mt-1 text-[#cccccc] py-0.5 px-1">Index.tsx</div>
+        <div className="pl-8 mt-1 flex items-center gap-1 text-[#cccccc]"><ChevronRight className="w-3 h-3"/> pages</div>
+      </div>
+      <div className="flex-1 bg-[#1e1e1e] p-6 text-[#d4d4d4] font-mono text-[14px] leading-relaxed overflow-hidden">
+        <div><span className="text-[#c586c0]">import</span> {"{ useRef, useState }"} <span className="text-[#c586c0]">from</span> <span className="text-[#ce9178]">'react'</span>;</div>
+        <div><span className="text-[#c586c0]">import</span> {"{ useFrame }"} <span className="text-[#c586c0]">from</span> <span className="text-[#ce9178]">'@react-three/fiber'</span>;</div>
+        <div><span className="text-[#c586c0]">import</span> <span className="text-[#9cdcfe]">*</span> <span className="text-[#c586c0]">as</span> THREE <span className="text-[#c586c0]">from</span> <span className="text-[#ce9178]">'three'</span>;</div>
+        <br/>
+        <div><span className="text-[#c586c0]">export function</span> <span className="text-[#dcdcaa]">MacbookModel</span>() {"{"}</div>
+        <div>&nbsp;&nbsp;<span className="text-[#c586c0]">const</span> lidRef = <span className="text-[#dcdcaa]">useRef</span>(null);</div>
+        <div>&nbsp;&nbsp;<span className="text-[#c586c0]">const</span> groupRef = <span className="text-[#dcdcaa]">useRef</span>(null);</div>
+        <br/>
+        <div>&nbsp;&nbsp;<span className="text-[#dcdcaa]">useFrame</span>((state) <span className="text-[#569cd6]">=&gt;</span> {"{"}</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#6a9955]">// Map openAmount to lid rotation</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#c586c0]">const</span> target = THREE.MathUtils.<span className="text-[#dcdcaa]">lerp</span>(-Math.PI * -0.44, -Math.PI * 0.05, openAmount);</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;lidRef.current.rotation.x = THREE.MathUtils.<span className="text-[#dcdcaa]">lerp</span>(lidRef.current.rotation.x, target, <span className="text-[#b5cea8]">0.12</span>);</div>
+        <div>&nbsp;&nbsp;{"});"}</div>
+        <br/>
+        <div>&nbsp;&nbsp;<span className="text-[#c586c0]">return</span> (</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#808080]">&lt;</span><span className="text-[#569cd6]">group</span> <span className="text-[#9cdcfe]">ref</span>=<span className="text-[#569cd6]">{`{groupRef}`}</span><span className="text-[#808080]">&gt;</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#6a9955]">{/* Base Chassis */}</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#808080]">&lt;</span><span className="text-[#4ec9b0]">RoundedBox</span> <span className="text-[#9cdcfe]">args</span>=<span className="text-[#569cd6]">{`{[3.6, 0.1, 2.4]}`}</span> <span className="text-[#9cdcfe]">radius</span>=<span className="text-[#b5cea8]">{0.04}</span> <span className="text-[#808080]">/&gt;</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#808080]">&lt;/</span><span className="text-[#569cd6]">group</span><span className="text-[#808080]">&gt;</span></div>
+        <div>&nbsp;&nbsp;);</div>
+        <div>{"}"}</div>
+      </div>
+    </div>
+  </div>
+);
 
 /**
  * BrowserScreen — 1:1 replica of the Yosemite macOS desktop and Chrome browser.
  */
-export function BrowserScreen({ active }: Props) {
+export function BrowserScreen({ active, storyProgress = 1.0 }: Props) {
   const section = SECTIONS.find((s) => s.id === active)!;
   const [typedUrl, setTypedUrl] = useState(section.url);
+
+  // Animation values derived from storyProgress
+  const isStoryMode = storyProgress < 1.0;
+  
+  // VSC visibility & animation
+  const isVscVisible = storyProgress < 0.6;
+  let vscTransform = "translate3d(0, 0, 0) scale(1)";
+  let vscOpacity = 1;
+  if (storyProgress >= 0.4 && storyProgress < 0.6) {
+    const p = (storyProgress - 0.4) * 5; // 0 to 1
+    vscTransform = `translate3d(-50px, ${p * 200}px, 0) scale(${1 - p * 0.4})`;
+    vscOpacity = 1 - p;
+  }
+
+  // Chrome visibility & animation
+  const isChromeVisible = storyProgress >= 0.75 || !isStoryMode;
+  let chromeTransform = "translate3d(0, 0, 0) scale(1)";
+  let chromeOpacity = 1;
+  if (isStoryMode && storyProgress >= 0.75 && storyProgress < 0.85) {
+    const p = (storyProgress - 0.75) * 10; // 0 to 1
+    // scale up from the dock (roughly x:425, y:660)
+    chromeTransform = `translate3d(0, ${(1 - p) * 300}px, 0) scale(${0.5 + p * 0.5})`;
+    chromeOpacity = p;
+  }
+
+  // Cursor animation
+  const isCursorVisible = storyProgress >= 0.6 && storyProgress < 0.95;
+  let cursorX = 530;
+  let cursorY = 350;
+  if (storyProgress >= 0.6 && storyProgress < 0.7) {
+    const p = (storyProgress - 0.6) * 10;
+    cursorX = 530 + p * (485 - 530); // 485 is safari icon X roughly
+    cursorY = 350 + p * (640 - 350); // 640 is safari icon Y roughly
+  } else if (storyProgress >= 0.7 && storyProgress < 0.85) {
+    cursorX = 485;
+    cursorY = 640;
+  } else if (storyProgress >= 0.85 && storyProgress < 0.9) {
+    const p = (storyProgress - 0.85) * 20; // 0 to 1
+    cursorX = 485 + p * (250 - 485); // 250 is url bar X
+    cursorY = 640 + p * (80 - 640); // 80 is url bar Y
+  } else if (storyProgress >= 0.9) {
+    cursorX = 250;
+    cursorY = 80;
+  }
+  
+  // Icon click effect
+  const safariIconScale = (storyProgress >= 0.7 && storyProgress < 0.75) ? 0.85 : 1;
+
+  // Typed URL during story mode
+  const urlToType = "varun.dev";
+  let displayUrl = typedUrl;
+  if (isStoryMode) {
+    if (storyProgress < 0.9) {
+      displayUrl = "";
+    } else if (storyProgress >= 0.9 && storyProgress < 0.98) {
+      const p = (storyProgress - 0.9) * 12.5; // 0 to 1
+      const len = Math.floor(p * urlToType.length);
+      displayUrl = urlToType.slice(0, len);
+    } else {
+      displayUrl = urlToType;
+    }
+  }
 
   const now = new Date();
 
@@ -38,10 +155,8 @@ export function BrowserScreen({ active }: Props) {
     hour12: false,
   });
 
-  console.log(day); // e.g., Monday
-  console.log(time); // e.g., 04:32 PM
-
   useEffect(() => {
+    if (isStoryMode) return;
     let i = 0;
     setTypedUrl("");
     const interval = window.setInterval(() => {
@@ -50,7 +165,7 @@ export function BrowserScreen({ active }: Props) {
       if (i >= section.url.length) window.clearInterval(interval);
     }, 28);
     return () => window.clearInterval(interval);
-  }, [section.url]);
+  }, [section.url, isStoryMode]);
 
   return (
     <div
@@ -107,11 +222,41 @@ export function BrowserScreen({ active }: Props) {
         </div>
       </div>
 
-      {/* Safe desktop area - matching the Chrome window placement */}
-      <div className="flex-1  relative overflow-hidden flex flex-col">
-        <div className="w-full h-full bg-white flex flex-col relative z-20 overflow-hidden">
+      {/* Safe desktop area */}
+      <div className="flex-1 relative overflow-hidden flex flex-col z-10">
+        
+        {/* VS Code Window */}
+        {isVscVisible && (
+          <VSCodeWindow style={{ transform: vscTransform, opacity: vscOpacity }} />
+        )}
+
+        {/* Cursor */}
+        {isCursorVisible && (
+          <div 
+            className="absolute z-[100] pointer-events-none transition-all duration-75"
+            style={{ 
+              left: cursorX, 
+              top: cursorY,
+              transform: 'translate(-2px, -2px)'
+            }}
+          >
+            <svg width="22" height="30" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: "drop-shadow(0px 2px 4px rgba(0,0,0,0.4))" }}>
+              <path d="M5.5 32L1 1L22.5 22.5H13L5.5 32Z" fill="black" stroke="white" strokeWidth="2.5" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        )}
+
+        {/* Chrome Window */}
+        <div 
+          className="absolute inset-0 bg-white flex flex-col z-20 overflow-hidden origin-bottom transition-all duration-75 shadow-2xl"
+          style={{ 
+            transform: chromeTransform, 
+            opacity: chromeOpacity,
+            display: isChromeVisible ? 'flex' : 'none' 
+          }}
+        >
           {/* Chrome Tab Bar (Yosemite style) */}
-          <div className="h-[34px] bg-gradient-to-b from-[#e8e8e8] to-[#d0d0d0] flex items-end px-2 flex-none relative">
+          <div className="h-[34px] bg-gradient-to-b from-[#e8e8e8] to-[#d0d0d0] flex items-end px-2 flex-none relative border-t border-white/50">
             {/* Traffic Lights */}
             <div className="absolute left-[12px] top-[12px] flex gap-[8px]">
               <div className="h-[12px] w-[12px] rounded-full bg-[#ff5f56] border border-[#e0443e] shadow-inner"></div>
@@ -152,8 +297,11 @@ export function BrowserScreen({ active }: Props) {
             </div>
             <div className="flex-1 h-[26px] bg-white border border-gray-300 rounded-[3px] flex items-center px-2 ml-1 shadow-inner relative group">
               <div className="w-3 h-3 border-2 border-gray-400 rounded-sm mr-2 group-hover:border-blue-500 transition-colors"></div>
-              <span className="text-[13px] text-gray-800 flex-1 font-sans truncate">
-                {typedUrl || "chrome://apps"}
+              <span className="text-[13px] text-gray-800 flex-1 font-sans truncate relative">
+                {displayUrl || "chrome://apps"}
+                {isStoryMode && storyProgress >= 0.9 && storyProgress < 0.98 && (
+                  <span className="absolute ml-0.5 w-0.5 h-4 bg-black animate-pulse inline-block align-middle top-0 bottom-0 my-auto"></span>
+                )}
               </span>
               <Star className="h-4 w-4 text-gray-400" />
               <span className="absolute right-[28px] w-px h-[16px] bg-gray-200"></span>
@@ -181,10 +329,10 @@ export function BrowserScreen({ active }: Props) {
       </div>
 
       {/* Yosemite Dock */}
-      <div className="absolute bottom-0 w-full flex justify-center pb-1">
+      <div className="absolute bottom-0 w-full flex justify-center pb-1 z-[60]">
         <div className="h-[64px] bg-white/30 backdrop-blur-xl border border-white/40 rounded-t-[4px] rounded-b-xl px-2 py-1 flex items-end gap-[6px] shadow-[0_-2px_15px_rgba(0,0,0,0.15)] z-50">
           {/* Finder */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-b from-blue-300 to-blue-500 rounded-[10px] overflow-hidden border border-black/10 shadow-md relative">
               <div className="absolute inset-x-0 h-1/2 bottom-0 bg-blue-600/20"></div>
               <div className="absolute top-[10px] left-[8px] w-[14px] h-[14px] bg-white rounded-full flex items-center justify-center border border-blue-400">
@@ -200,15 +348,18 @@ export function BrowserScreen({ active }: Props) {
           </div>
 
           {/* Launchpad */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-br from-gray-200 to-gray-400 rounded-full border border-black/10 shadow-md flex items-center justify-center text-[22px]">
               🚀
             </div>
           </div>
 
-          {/* Safari */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
-            <div className="w-[48px] h-[48px] bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full border border-black/10 shadow-md flex items-center justify-center relative overflow-hidden">
+          {/* Safari / Chrome */}
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+            <div 
+              className="w-[48px] h-[48px] bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full border border-black/10 shadow-md flex items-center justify-center relative overflow-hidden transition-transform duration-75"
+              style={{ transform: `scale(${safariIconScale})` }}
+            >
               <div className="w-[38px] h-[38px] bg-white rounded-full flex items-center justify-center relative border border-blue-300">
                 <div className="w-full border-t border-gray-200 absolute top-1/2"></div>
                 <div className="h-full border-l border-gray-200 absolute left-1/2"></div>
@@ -216,11 +367,13 @@ export function BrowserScreen({ active }: Props) {
                 <div className="w-1.5 h-[13px] bg-gray-200 absolute rotate-45 top-[6px] left-[6px] rounded-sm origin-center z-10"></div>
               </div>
             </div>
-            <div className="absolute -bottom-[5px] w-1 h-1 bg-black/50 rounded-full blur-[0.5px]"></div>
+            {isChromeVisible && (
+              <div className="absolute -bottom-[5px] w-1 h-1 bg-black/50 rounded-full blur-[0.5px]"></div>
+            )}
           </div>
 
           {/* Mail */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-br from-blue-400 to-blue-200 rounded-[8px] border border-black/10 shadow-md flex items-center justify-center overflow-hidden">
               <div className="w-[44px] h-[32px] bg-white rounded-[4px] relative border border-gray-300 shadow-inner flex overflow-hidden">
                 <div className="absolute top-0 inset-x-0 h-1/2 border-b border-gray-200 rotate-[20deg] origin-left scale-[1.5]"></div>
@@ -230,7 +383,7 @@ export function BrowserScreen({ active }: Props) {
           </div>
 
           {/* Contacts */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-r from-yellow-700 to-amber-600 rounded-[8px] border border-black/10 shadow-md flex relative overflow-hidden">
               <div className="w-[8px] h-full bg-black/20 border-r border-black/30"></div>
               <div className="flex-1 flex flex-col justify-center items-center gap-1 opacity-70">
@@ -250,7 +403,7 @@ export function BrowserScreen({ active }: Props) {
           </div>
 
           {/* Calendar */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-white rounded-[8px] border border-black/10 shadow-md flex flex-col overflow-hidden">
               <div className="h-[14px] bg-gradient-to-b from-red-500 to-red-600 border-b border-red-700 font-sans text-[7px] text-white font-medium flex items-center justify-center tracking-widest">
                 JUL
@@ -262,7 +415,7 @@ export function BrowserScreen({ active }: Props) {
           </div>
 
           {/* Notes */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-white rounded-[8px] border border-black/10 shadow-md overflow-hidden relative">
               <div className="h-[12px] bg-gradient-to-b from-amber-400 to-yellow-400 border-b border-yellow-500 overflow-hidden relative">
                 <div className="absolute w-[60px] h-[5px] bg-white/30 top-1 -left-2 rotate-12"></div>
@@ -276,7 +429,7 @@ export function BrowserScreen({ active }: Props) {
           </div>
 
           {/* Maps */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-br from-[#cce5ff] to-[#99ccff] rounded-[8px] border border-black/10 shadow-md overflow-hidden relative">
               <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
                 <div className="border-r border-b border-blue-400/30"></div>
@@ -292,7 +445,7 @@ export function BrowserScreen({ active }: Props) {
           </div>
 
           {/* Messages */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-b from-[#6cfb6c] to-[#25d366] rounded-full shadow-md flex items-center justify-center relative overflow-hidden border border-black/10">
               <div className="absolute bottom-[2px] left-[8px] w-0 h-0 border-l-[10px] border-l-transparent border-t-[10px] border-t-[#25d366] border-r-[4px] border-r-transparent -rotate-12"></div>
               <div className="w-[28px] h-[18px] bg-white rounded-[10px] flex items-center justify-center relative z-10 shadow-inner">
@@ -303,19 +456,19 @@ export function BrowserScreen({ active }: Props) {
                 </div>
               </div>
             </div>
-            <div className="absolute -bottom-[5px] w-1 h-1 bg-black/50 rounded-full blur-[0.5px]"></div>
+            {/* <div className="absolute -bottom-[5px] w-1 h-1 bg-black/50 rounded-full blur-[0.5px]"></div> */}
           </div>
 
           {/* FaceTime */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-b from-[#6cfb6c] to-[#25d366] rounded-[10px] border border-black/10 shadow-md flex flex-row items-center justify-center p-[6px]">
               <div className="w-[24px] h-[18px] bg-white rounded-l-[4px] border border-gray-200"></div>
               <div className="w-0 h-0 border-l-[12px] border-l-white border-y-[6px] border-y-transparent"></div>
             </div>
           </div>
 
-          {/* Photo Booth / Presentation app */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          {/* Photo Booth */}
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-b from-red-600 to-[#800000] rounded-[8px] border border-black/10 shadow-md flex overflow-hidden">
               <div className="w-1/2 h-full bg-red-500/30 rounded-br-full shadow-lg"></div>
               <div className="w-1/2 h-full bg-red-700/30 rounded-bl-full shadow-lg"></div>
@@ -323,21 +476,21 @@ export function BrowserScreen({ active }: Props) {
           </div>
 
           {/* iTunes */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-br from-pink-400 to-red-500 rounded-full border border-black/10 shadow-md flex items-center justify-center text-white text-[24px]">
               🎵
             </div>
           </div>
 
           {/* iBooks */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-br from-orange-400 to-orange-500 rounded-full border border-black/10 shadow-md flex items-center justify-center text-white text-[26px]">
               📖
             </div>
           </div>
 
           {/* App Store */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-bl from-blue-400 to-blue-600 rounded-full border border-black/10 shadow-md flex items-center justify-center relative overflow-hidden">
               <div className="w-[30px] h-[3px] bg-white rounded-full absolute rotate-[60deg] shadow-sm"></div>
               <div className="w-[30px] h-[3px] bg-white rounded-full absolute -rotate-[60deg] shadow-sm"></div>
@@ -346,7 +499,7 @@ export function BrowserScreen({ active }: Props) {
           </div>
 
           {/* System Preferences */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center">
             <div className="w-[48px] h-[48px] bg-gradient-to-br from-gray-200 to-gray-400 rounded-[10px] border border-black/10 shadow-md flex items-center justify-center overflow-hidden">
               <div className="w-[34px] h-[34px] border-[4px] border-stone-500 rounded-full border-dashed animate-spin-slow"></div>
             </div>
@@ -356,7 +509,7 @@ export function BrowserScreen({ active }: Props) {
           <div className="w-px h-[40px] bg-white/30 mx-[2px] mb-[6px] shadow-[1px_0_0_rgba(0,0,0,0.1)]"></div>
 
           {/* Trash */}
-          <div className="w-[52px] h-[52px] cursor-pointer hover:scale-[1.15] hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center ml-1">
+          <div className="w-[52px] h-[52px] cursor-pointer hover:-translate-y-2 transition-all origin-bottom relative flex justify-center items-center ml-1">
             <div className="w-[38px] h-[42px] bg-white/40 border border-white/60 rounded-b-[6px] flex relative shadow-[inset_0_-5px_10px_rgba(255,255,255,0.4)] overflow-hidden">
               <div className="absolute top-0 inset-x-0 h-[6px] border-b-[2px] border-white/80"></div>
               <div className="flex justify-between px-2 pt-2 pb-1 w-full opacity-60">

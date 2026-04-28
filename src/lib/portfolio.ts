@@ -1,4 +1,10 @@
-export type SectionId = "home" | "about" | "skills" | "experience" | "projects" | "contact";
+export type SectionId =
+  | "home"
+  | "about"
+  | "skills"
+  | "experience"
+  | "projects"
+  | "contact";
 
 export interface Section {
   id: SectionId;
@@ -8,19 +14,58 @@ export interface Section {
 }
 
 export const SECTIONS: Section[] = [
-  { id: "home",       url: "varun.dev",            title: "Home",       navLabel: "Home" },
-  { id: "about",      url: "varun.dev/about",      title: "About",      navLabel: "About" },
-  { id: "skills",     url: "varun.dev/skills",     title: "Skills",     navLabel: "Skills" },
-  { id: "experience", url: "varun.dev/experience", title: "Experience", navLabel: "Experience" },
-  { id: "projects",   url: "varun.dev/projects",   title: "Projects",   navLabel: "Projects" },
-  { id: "contact",    url: "varun.dev/contact",    title: "Contact",    navLabel: "Contact" },
+  { id: "home", url: "varun.dev", title: "Home", navLabel: "Home" },
+  { id: "about", url: "varun.dev/about", title: "About", navLabel: "About" },
+  {
+    id: "skills",
+    url: "varun.dev/skills",
+    title: "Skills",
+    navLabel: "Skills",
+  },
+  {
+    id: "experience",
+    url: "varun.dev/experience",
+    title: "Experience",
+    navLabel: "Experience",
+  },
+  {
+    id: "projects",
+    url: "varun.dev/projects",
+    title: "Projects",
+    navLabel: "Projects",
+  },
+  {
+    id: "contact",
+    url: "varun.dev/contact",
+    title: "Contact",
+    navLabel: "Contact",
+  },
 ];
 
 export const SKILLS = [
-  { group: "Frontend",    items: ["React", "TypeScript", "Next.js", "Tailwind", "GSAP", "Framer Motion"] },
-  { group: "3D & Visual", items: ["Three.js", "react-three-fiber", "WebGL", "Blender", "Shaders"] },
-  { group: "Backend",     items: ["Node.js", "tRPC", "Postgres", "Supabase", "Redis"] },
-  { group: "Tooling",     items: ["Vite", "Turborepo", "Docker", "Vitest", "Playwright"] },
+  {
+    group: "Frontend",
+    items: [
+      "React",
+      "TypeScript",
+      "Next.js",
+      "Tailwind",
+      "GSAP",
+      "Framer Motion",
+    ],
+  },
+  {
+    group: "3D & Visual",
+    items: ["Three.js", "react-three-fiber", "WebGL", "Blender", "Shaders"],
+  },
+  {
+    group: "Backend",
+    items: ["Node.js", "tRPC", "Postgres", "Supabase", "Redis"],
+  },
+  {
+    group: "Tooling",
+    items: ["Vite", "Turborepo", "Docker", "Vitest", "Playwright"],
+  },
 ];
 
 export const EXPERIENCE = [
@@ -28,13 +73,15 @@ export const EXPERIENCE = [
     role: "Senior Creative Engineer",
     company: "Driftwood Studio",
     period: "2023 — Present",
-    blurb: "Leading 3D & motion work across product launches for design-forward startups.",
+    blurb:
+      "Leading 3D & motion work across product launches for design-forward startups.",
   },
   {
     role: "Frontend Engineer",
     company: "Cedar & Co.",
     period: "2020 — 2023",
-    blurb: "Built the design system and shipped the flagship analytics dashboard used by 30k teams.",
+    blurb:
+      "Built the design system and shipped the flagship analytics dashboard used by 30k teams.",
   },
   {
     role: "Full-stack Developer",
@@ -46,7 +93,8 @@ export const EXPERIENCE = [
     role: "Freelance Developer",
     company: "Independent",
     period: "2017 — 2018",
-    blurb: "First clients, first lessons, first all-nighters. Worth every minute.",
+    blurb:
+      "First clients, first lessons, first all-nighters. Worth every minute.",
   },
 ];
 
@@ -54,7 +102,8 @@ export const PROJECTS = [
   {
     title: "Forest Atlas",
     tag: "WebGL · Data viz",
-    blurb: "An interactive 3D atlas mapping global reforestation projects in real time.",
+    blurb:
+      "An interactive 3D atlas mapping global reforestation projects in real time.",
     accent: "moss",
   },
   {

@@ -1,5 +1,5 @@
 import { useRef, useMemo } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Environment,
   Html,
@@ -11,19 +11,40 @@ import * as THREE from "three";
 import { BrowserScreen } from "./BrowserScreen";
 import { SectionId } from "@/lib/portfolio";
 
+
 interface MacbookProps {
   /** 0 = closed, 1 = fully open. Drives the lid rotation. */
   openAmount: number;
   activeSection: SectionId;
+  storyProgress: number;
 }
 
 /**
  * MacbookModel — a procedural highly-detailed MacBook "Neo" Mockup.
  * Fixed Geometry: Uses safe corner radiuses to prevent geometry bloating.
  */
-function MacbookModel({ openAmount, activeSection }: MacbookProps) {
+function MacbookModel({ openAmount, activeSection, storyProgress }: MacbookProps) {
   const lidRef = useRef<THREE.Group>(null);
   const groupRef = useRef<THREE.Group>(null);
+
+  const { size } = useThree();
+
+  // --- Responsive uniform scale ---
+  // Compute the visible width of the scene at z=0, then scale the laptop
+  // so its 3.6-unit width always fits with a small margin.
+  const scale = useMemo(() => {
+    const fov = 32; // must match camera fov below
+    const z = 5;    // camera z position
+    const vFovRad = (fov * Math.PI) / 180;
+    const visibleHeight = 2 * Math.tan(vFovRad / 2) * z;
+    const visibleWidth = visibleHeight * (size.width / size.height);
+    const laptopWidth = 3.6; // base geometry width
+    const margin = 0.9;     // keep 90% so there's breathing room
+    const s = (visibleWidth / laptopWidth) * margin;
+    return Math.min(s, 1); // never scale UP, only DOWN on narrow screens
+  }, [size]);
+
+  const screenSize = { width: 1060, height: 700, distanceFactor: 1.34 };
 
   // Map openAmount (0..1) -> lid rotation.
   useFrame((state) => {
@@ -317,7 +338,7 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
   }, [baseW, baseH]);
 
   return (
-    <group ref={groupRef} position={[0, -0.4, 0]}>
+    <group ref={groupRef} position={[0, -0.4, 0]} scale={[scale, scale, scale]}>
       {/* Base Chassis */}
       <RoundedBox
         castShadow
@@ -403,27 +424,27 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
         />
 
         {/* Lid Inner Bezel */}
-        {/* <RoundedBox
+        <RoundedBox
           material={glass}
           args={[baseW * 0.98, lidThickness * 1, baseD * 0.98]}
           radius={0.02}
           smoothness={4}
           position={[0, baseD / 2, 0.001]}
           rotation={[Math.PI / 2, 0, 0]}
-        /> */}
+        />
 
         {/* Browser Screen */}
         <Html
           transform
           occlude={false}
           position={[0, baseD / 2, 0.012]}
-          distanceFactor={1.34}
+          distanceFactor={screenSize.distanceFactor}
           style={{ pointerEvents: openAmount > 0.7 ? "auto" : "none" }}
         >
           <div
             style={{
-              width: "1060px",
-              height: "700px",
+              width: `${screenSize.width}px`,
+              height: `${screenSize.height}px`,
               borderRadius: "8px",
               overflow: "hidden",
               border: "12px solid #000",
@@ -438,7 +459,7 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
               style={{ boxShadow: "inset 0 -1px 3px rgba(255,255,255,0.1)" }}
             />
 
-            <BrowserScreen active={activeSection} />
+            <BrowserScreen active={activeSection} storyProgress={storyProgress} />
           </div>
         </Html>
       </group>
@@ -449,9 +470,10 @@ function MacbookModel({ openAmount, activeSection }: MacbookProps) {
 interface CanvasProps {
   openAmount: number;
   activeSection: SectionId;
+  storyProgress: number;
 }
 
-export function MacbookCanvas({ openAmount, activeSection }: CanvasProps) {
+export function MacbookCanvas({ openAmount, activeSection, storyProgress }: CanvasProps) {
   return (
     <Canvas
       shadows
@@ -473,7 +495,7 @@ export function MacbookCanvas({ openAmount, activeSection }: CanvasProps) {
         color="#e8d8b8"
       />
 
-      <MacbookModel openAmount={openAmount} activeSection={activeSection} />
+      <MacbookModel openAmount={openAmount} activeSection={activeSection} storyProgress={storyProgress} />
 
       <ContactShadows
         position={[0, -0.4, 0]}

@@ -24,7 +24,11 @@ export function ContactForm() {
       return;
     }
     setLoading(true);
-    const payload = parsed.data as ContactInput & { name: string; email: string; message: string };
+    const payload = parsed.data as ContactInput & {
+      name: string;
+      email: string;
+      message: string;
+    };
     const { error } = await supabase.from("contact_messages").insert([payload]);
     setLoading(false);
     if (error) {
@@ -67,7 +71,11 @@ export function ContactForm() {
         disabled={loading}
         className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-forest text-primary-foreground font-medium px-4 py-2.5 text-sm shadow-glow hover:opacity-95 transition-opacity disabled:opacity-60"
       >
-        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+        {loading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <Send className="h-4 w-4" />
+        )}
         {loading ? "Sending…" : "Send message"}
       </button>
     </form>
