@@ -23,6 +23,7 @@ import {
 interface Props {
   active: SectionId;
   storyProgress?: number;
+  onMaximize?: () => void;
 }
 
 const VSCodeWindow = ({ style }: { style: React.CSSProperties }) => (
@@ -169,7 +170,7 @@ const VSCodeWindow = ({ style }: { style: React.CSSProperties }) => (
 /**
  * BrowserScreen — 1:1 replica of the Yosemite macOS desktop and Chrome browser.
  */
-export function BrowserScreen({ active, storyProgress = 1.0 }: Props) {
+export function BrowserScreen({ active, storyProgress = 1.0, onMaximize }: Props) {
   const section = SECTIONS.find((s) => s.id === active)!;
   const [typedUrl, setTypedUrl] = useState(section.url);
 
@@ -357,7 +358,18 @@ export function BrowserScreen({ active, storyProgress = 1.0 }: Props) {
             <div className="absolute left-[12px] top-[12px] flex gap-[8px]">
               <div className="h-[12px] w-[12px] rounded-full bg-[#ff5f56] border border-[#e0443e] shadow-inner"></div>
               <div className="h-[12px] w-[12px] rounded-full bg-[#ffbd2e] border border-[#dea123] shadow-inner"></div>
-              <div className="h-[12px] w-[12px] rounded-full bg-[#27c93f] border border-[#1aab29] shadow-inner"></div>
+              <div 
+                className="h-[12px] w-[12px] rounded-full bg-[#27c93f] border border-[#1aab29] shadow-inner cursor-pointer hover:bg-[#2fe54a] transition-colors flex items-center justify-center group"
+                onClick={onMaximize}
+                title="View Fullscreen"
+              >
+                <div className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 flex items-center justify-center overflow-hidden">
+                  <svg width="8" height="8" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 9V6M1 9H4M1 9L4 6" stroke="#06560F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9 1V4M9 1H6M9 1L6 4" stroke="#06560F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Active Tab */}

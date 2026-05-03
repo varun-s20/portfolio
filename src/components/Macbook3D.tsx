@@ -11,19 +11,24 @@ import * as THREE from "three";
 import { BrowserScreen } from "./BrowserScreen";
 import { SectionId } from "@/lib/portfolio";
 
-
 interface MacbookProps {
   /** 0 = closed, 1 = fully open. Drives the lid rotation. */
   openAmount: number;
   activeSection: SectionId;
   storyProgress: number;
+  onMaximize?: () => void;
 }
 
 /**
  * MacbookModel — a procedural highly-detailed MacBook "Neo" Mockup.
  * Fixed Geometry: Uses safe corner radiuses to prevent geometry bloating.
  */
-function MacbookModel({ openAmount, activeSection, storyProgress }: MacbookProps) {
+function MacbookModel({
+  openAmount,
+  activeSection,
+  storyProgress,
+  onMaximize,
+}: MacbookProps) {
   const lidRef = useRef<THREE.Group>(null);
   const groupRef = useRef<THREE.Group>(null);
 
@@ -34,12 +39,12 @@ function MacbookModel({ openAmount, activeSection, storyProgress }: MacbookProps
   // so its 3.6-unit width always fits with a small margin.
   const scale = useMemo(() => {
     const fov = 32; // must match camera fov below
-    const z = 5;    // camera z position
+    const z = 5; // camera z position
     const vFovRad = (fov * Math.PI) / 180;
     const visibleHeight = 2 * Math.tan(vFovRad / 2) * z;
     const visibleWidth = visibleHeight * (size.width / size.height);
     const laptopWidth = 3.6; // base geometry width
-    const margin = 0.9;     // keep 90% so there's breathing room
+    const margin = 0.9; // keep 90% so there's breathing room
     const s = (visibleWidth / laptopWidth) * margin;
     return Math.min(s, 1); // never scale UP, only DOWN on narrow screens
   }, [size]);
@@ -70,7 +75,7 @@ function MacbookModel({ openAmount, activeSection, storyProgress }: MacbookProps
     );
     groupRef.current.rotation.x = THREE.MathUtils.lerp(
       groupRef.current.rotation.x,
-      -my * 0.05,
+      0, // Disabled vertical leaning
       0.05,
     );
   });
@@ -459,7 +464,11 @@ function MacbookModel({ openAmount, activeSection, storyProgress }: MacbookProps
               style={{ boxShadow: "inset 0 -1px 3px rgba(255,255,255,0.1)" }}
             />
 
-            <BrowserScreen active={activeSection} storyProgress={storyProgress} />
+            <BrowserScreen
+              active={activeSection}
+              storyProgress={storyProgress}
+              onMaximize={onMaximize}
+            />
           </div>
         </Html>
       </group>
@@ -471,9 +480,15 @@ interface CanvasProps {
   openAmount: number;
   activeSection: SectionId;
   storyProgress: number;
+  onMaximize?: () => void;
 }
 
-export function MacbookCanvas({ openAmount, activeSection, storyProgress }: CanvasProps) {
+export function MacbookCanvas({
+  openAmount,
+  activeSection,
+  storyProgress,
+  onMaximize,
+}: CanvasProps) {
   return (
     <Canvas
       shadows
@@ -495,7 +510,12 @@ export function MacbookCanvas({ openAmount, activeSection, storyProgress }: Canv
         color="#e8d8b8"
       />
 
-      <MacbookModel openAmount={openAmount} activeSection={activeSection} storyProgress={storyProgress} />
+      <MacbookModel
+        openAmount={openAmount}
+        activeSection={activeSection}
+        storyProgress={storyProgress}
+        onMaximize={onMaximize}
+      />
 
       <ContactShadows
         position={[0, -0.4, 0]}

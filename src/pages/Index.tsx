@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
 import { SECTIONS, SectionId } from "@/lib/portfolio";
-import { ChevronDown, Leaf } from "lucide-react";
+import { ChevronDown, Leaf, Monitor } from "lucide-react";
+import {
+  ScreenContent,
+  Home,
+  About,
+  Skills,
+  Experience,
+  Projects,
+  Contact,
+} from "@/components/ScreenContent";
 
 const MacbookCanvas = lazy(() =>
   import("@/components/Macbook3D").then((m) => ({ default: m.MacbookCanvas })),
@@ -23,18 +32,107 @@ const MacbookCanvas = lazy(() =>
  */
 const INTRO_SLICES = 1; // intro takes 1 viewport
 const STORY_SLICES = 2; // story sequence takes 2 viewports
-const SECTION_SLICES = 1; // each section takes 1 viewport
+const SECTION_SLICES = 1.5; // each section takes 1.5 viewports to scroll comfortably
+
+function FullScreenView({
+  onClose,
+  initialSection,
+}: {
+  onClose: (currentSection: SectionId) => void;
+  initialSection: SectionId;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState<SectionId>(initialSection);
+
+  useEffect(() => {
+    const el = document.getElementById(`fs-${initialSection}`);
+    if (el && containerRef.current) {
+      el.scrollIntoView({ behavior: "instant" });
+    }
+  }, [initialSection]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id.replace("fs-", "") as SectionId;
+            setActive(id);
+          }
+        });
+      },
+      { threshold: 0.4 },
+    );
+
+    SECTIONS.forEach((s) => {
+      const el = document.getElementById(`fs-${s.id}`);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-[100] bg-background overflow-y-auto scroll-smooth"
+    >
+      <Navbar activeSection={active} />
+      <div className="flex flex-col w-full bg-olive-paper text-white paper-texture pt-16">
+        <section id="fs-home">
+          <Home />
+        </section>
+        <div className="bg-white-paper text-olive torn-edge-top relative z-10 pb-20 pt-10">
+          <section id="fs-about" className="pt-10">
+            <About />
+          </section>
+          <section id="fs-skills" className="pt-20">
+            <Skills />
+          </section>
+          <section id="fs-experience" className="pt-20">
+            <Experience />
+          </section>
+          <section id="fs-projects" className="pt-20">
+            <Projects />
+          </section>
+          <section id="fs-contact" className="pt-20">
+            <Contact />
+          </section>
+        </div>
+      </div>
+      <button
+        onClick={() => onClose(active)}
+        className="fixed bottom-6 right-6 z-[110] flex items-center gap-2 px-5 py-3.5 bg-primary text-primary-foreground rounded-full shadow-lg hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all active:scale-95 duration-300"
+      >
+        <Monitor className="w-5 h-5" />
+        <span className="text-sm font-semibold tracking-wide">
+          Return to 3D View
+        </span>
+      </button>
+    </div>
+  );
+}
 
 const Index = () => {
   const stageRef = useRef<HTMLDivElement>(null);
   const [openAmount, setOpenAmount] = useState(0);
   const [storyProgress, setStoryProgress] = useState(0);
   const [activeSection, setActiveSection] = useState<SectionId>("home");
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const totalSlices = INTRO_SLICES + STORY_SLICES + SECTIONS.length * SECTION_SLICES;
+  const totalSlices = INTRO_SLICES + STORY_SLICES + (SECTIONS.length * SECTION_SLICES);
+
+  useEffect(() => {
+    const handleMacbookSection = (e: any) => {
+      setActiveSection(e.detail);
+    };
+    window.addEventListener("macbook-section", handleMacbookSection);
+    return () => window.removeEventListener("macbook-section", handleMacbookSection);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
+      if (isFullScreen) return;
       const el = stageRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
@@ -57,19 +155,17 @@ const Index = () => {
       }
       setStoryProgress(sp);
 
-      // Section: index 0..SECTIONS.length-1
-      if (sliceProgress < INTRO_SLICES + STORY_SLICES) {
-        setActiveSection("home"); // keep home active during story
-      } else {
-        const sectionFloat = (sliceProgress - (INTRO_SLICES + STORY_SLICES)) / SECTION_SLICES;
-        const idx = Math.min(Math.floor(sectionFloat), SECTIONS.length - 1);
-        setActiveSection(SECTIONS[idx].id);
+      // Inner screen scroll progress
+      let innerP = 0;
+      if (sliceProgress > INTRO_SLICES + STORY_SLICES) {
+        innerP = (sliceProgress - (INTRO_SLICES + STORY_SLICES)) / (SECTIONS.length * SECTION_SLICES);
       }
+      window.dispatchEvent(new CustomEvent("macbook-scroll", { detail: Math.min(Math.max(innerP, 0), 1) }));
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [totalSlices]);
+  }, [totalSlices, isFullScreen]);
 
   // Click handler: scroll to the middle of the requested section's slice
   useEffect(() => {
@@ -82,22 +178,63 @@ const Index = () => {
       const idx = SECTIONS.findIndex((s) => s.id === id);
       if (idx === -1) return;
       e.preventDefault();
-      const el = stageRef.current;
-      if (!el) return;
-      const total = el.offsetHeight - window.innerHeight;
-      // Middle of the slice for this section
-      const sliceCenter = INTRO_SLICES + STORY_SLICES + idx * SECTION_SLICES + SECTION_SLICES * 0.5;
-      const ratio = sliceCenter / totalSlices;
-      const top = el.offsetTop + total * ratio;
-      window.scrollTo({ top, behavior: "smooth" });
+
+      if (isFullScreen) {
+        const el = document.getElementById(`fs-${id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+        return;
+      }
+
+      // Tell the inner Macbook screen to report its target scroll, which will then sync the outer window
+      window.dispatchEvent(new CustomEvent("navbar-click", { detail: id }));
     };
     document.addEventListener("click", handler);
     return () => document.removeEventListener("click", handler);
+  }, [totalSlices, isFullScreen]);
+
+  useEffect(() => {
+    const handleSync = (e: any) => {
+      const targetP = e.detail; // 0 to 1
+      const el = stageRef.current;
+      if (!el) return;
+      const vh = window.innerHeight;
+      const total = el.offsetHeight - vh;
+      
+      const storyEndProgress = (INTRO_SLICES + STORY_SLICES) / totalSlices;
+      const sectionsTotalProgress = (SECTIONS.length * SECTION_SLICES) / totalSlices;
+      
+      const targetOuterProgress = storyEndProgress + targetP * sectionsTotalProgress;
+      const targetOuterScroll = targetOuterProgress * total;
+      
+      window.scrollTo({ top: el.offsetTop + targetOuterScroll, behavior: "smooth" });
+    };
+    window.addEventListener("sync-outer-scroll", handleSync);
+    return () => window.removeEventListener("sync-outer-scroll", handleSync);
   }, [totalSlices]);
+
+  const handleReturnTo3D = (currentSection: SectionId) => {
+    setIsFullScreen(false);
+    const idx = SECTIONS.findIndex((s) => s.id === currentSection);
+    if (idx === -1) return;
+
+    // We can dispatch navbar-click so the view syncs to the right section
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent("navbar-click", { detail: currentSection }));
+    }, 50);
+  };
 
   return (
     <div id="top" className="relative bg-gradient-sky">
-      <Navbar activeSection={activeSection} />
+      {!isFullScreen && <Navbar activeSection={activeSection} />}
+
+      {isFullScreen && (
+        <FullScreenView
+          initialSection={activeSection}
+          onClose={handleReturnTo3D}
+        />
+      )}
 
       {/* The ENTIRE site is one tall scroll stage.
           The MacBook lives in a sticky container and stays pinned the whole time.
@@ -126,7 +263,12 @@ const Index = () => {
                 </div>
               }
             >
-              <MacbookCanvas openAmount={openAmount} activeSection={activeSection} storyProgress={storyProgress} />
+              <MacbookCanvas
+                openAmount={openAmount}
+                activeSection={activeSection}
+                storyProgress={storyProgress}
+                onMaximize={() => setIsFullScreen(true)}
+              />
             </Suspense>
           </div>
 

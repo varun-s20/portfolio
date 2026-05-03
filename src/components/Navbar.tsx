@@ -15,7 +15,8 @@ export function Navbar({ activeSection }: Props) {
             <Leaf className="h-4 w-4 text-primary-foreground" />
           </span>
           <span className="font-display text-lg font-semibold tracking-tight">
-            Varun <span className="text-muted-foreground font-normal">Singh</span>
+            Varun{" "}
+            <span className="text-muted-foreground font-normal">Singh</span>
           </span>
         </a>
 

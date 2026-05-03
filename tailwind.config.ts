@@ -17,9 +17,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Fraunces"', "ui-serif", "Georgia", "serif"],
+        display: ['"Outfit"', "ui-sans-serif", "system-ui", "sans-serif"],
         sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+        handwriting: ['"Caveat"', "cursive"],
+        fraunces: ['"Fraunces"', "ui-serif", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -56,11 +58,11 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sand: "hsl(var(--sand))",
-        clay: "hsl(var(--clay))",
-        moss: "hsl(var(--moss))",
-        bark: "hsl(var(--bark))",
-        leaf: "hsl(var(--leaf))",
+        olive: "#1A2421",
+        paper: "#FDFCF0",
+        yellow: {
+          accent: "#FFDE00"
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -117,6 +119,12 @@ export default {
           "0%, 50%, 100%": { opacity: "1" },
           "25%, 75%": { opacity: "0" },
         },
+        jitter: {
+          "0%, 100%": { transform: "translate(0, 0) rotate(0deg)" },
+          "25%": { transform: "translate(-1px, 1px) rotate(-0.5deg)" },
+          "50%": { transform: "translate(1px, -1px) rotate(0.5deg)" },
+          "75%": { transform: "translate(1px, 1px) rotate(-0.25deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -126,6 +134,7 @@ export default {
         float: "float 6s ease-in-out infinite",
         shimmer: "shimmer 3s linear infinite",
         blink: "blink 1.2s infinite",
+        jitter: "jitter 0.3s steps(3) infinite",
       },
     },
   },
