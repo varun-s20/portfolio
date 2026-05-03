@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
 import { SECTIONS, SectionId } from "@/lib/portfolio";
-import { ChevronDown, Leaf, Monitor } from "lucide-react";
+import { ChevronDown, Terminal, Monitor } from "lucide-react";
 import {
   ScreenContent,
   Home,
@@ -75,7 +75,7 @@ function FullScreenView({
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[100] bg-background overflow-y-auto scroll-smooth"
+      className="fixed inset-0 z-[100] bg-background overflow-y-auto scroll-smooth scrollbar-hide"
     >
       <Navbar activeSection={active} />
       <div className="flex flex-col w-full bg-olive-paper text-white paper-texture pt-16">
@@ -305,7 +305,7 @@ const Index = () => {
           {/* Bottom HUD — opening % during intro, then segmented progress */}
           <div className="pointer-events-none absolute bottom-6 left-0 right-0 z-30 flex justify-center">
             <div className="glass rounded-full px-4 py-2 flex items-center gap-3 shadow-soft pointer-events-auto">
-              <Leaf className="h-3.5 w-3.5 text-primary" />
+              <Terminal className="h-3.5 w-3.5 text-primary" />
               {openAmount < 1 ? (
                 <span className="font-mono text-xs text-muted-foreground">
                   Opening · {Math.round(openAmount * 100)}%

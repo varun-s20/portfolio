@@ -66,7 +66,7 @@ function MacbookModel({
     const t = state.clock.elapsedTime;
     groupRef.current.position.y = Math.sin(t * 1.5) * 0.03 - 0.75;
 
-    const mx = state.mouse.x;
+    const mx = window.innerWidth < 768 ? 0 : state.mouse.x;
     const my = state.mouse.y;
     groupRef.current.rotation.y = THREE.MathUtils.lerp(
       groupRef.current.rotation.y,

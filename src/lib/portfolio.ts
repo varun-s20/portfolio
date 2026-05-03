@@ -47,81 +47,80 @@ export const SKILLS = [
     group: "Frontend",
     items: [
       "React",
-      "TypeScript",
       "Next.js",
+      "Typescript",
+      "Angular",
+      "HTML",
+      "CSS",
       "Tailwind",
-      "GSAP",
-      "Framer Motion",
+      "Bootstrap",
     ],
   },
   {
-    group: "3D & Visual",
-    items: ["Three.js", "react-three-fiber", "WebGL", "Blender", "Shaders"],
-  },
-  {
     group: "Backend",
-    items: ["Node.js", "tRPC", "Postgres", "Supabase", "Redis"],
+    items: ["Node.js", ".NET Core", "Java", "Python"],
   },
   {
-    group: "Tooling",
-    items: ["Vite", "Turborepo", "Docker", "Vitest", "Playwright"],
+    group: "Databases",
+    items: ["Supabase", "PostgreSQL", "MongoDB", "MySQL", "SQL Server", "Firebase"],
+  },
+  {
+    group: "Tools & Platforms",
+    items: ["Git", "Figma", "Vercel", "Cloudflare", "Storybook", "Playwright", "Chromatic"],
   },
 ];
 
 export const EXPERIENCE = [
   {
-    role: "Senior Creative Engineer",
-    company: "Driftwood Studio",
-    period: "2023 — Present",
-    blurb:
-      "Leading 3D & motion work across product launches for design-forward startups.",
+    role: "IT Manager",
+    company: "Jyot",
+    period: "Recent",
+    date: "Dec 2025 — Jan 2026",
+    blurb: "Developed a data management portal using Next.js and Supabase handling 400K+ records, reducing manual work by 60%. Engineered an email automation pipeline (Node.js, Amazon SES) sending 100K+ emails daily, and built an event/media platform with React and MongoDB.",
   },
   {
-    role: "Frontend Engineer",
-    company: "Cedar & Co.",
-    period: "2020 — 2023",
+    role: "Full Stack Developer Intern",
+    company: "Worley",
+    period: "Past",
+    date: "Jan 2025 — June 2025",
     blurb:
-      "Built the design system and shipped the flagship analytics dashboard used by 30k teams.",
+      "Built a comment extraction module using Angular, .NET Core, and SQL Server that reduced manual review workflows from 4 hours to under 30 minutes. Developed an Excel export system, file validation pipeline, and resolved 30+ critical bugs across multiple Agile sprint cycles.",
   },
   {
-    role: "Full-stack Developer",
-    company: "Atelier Numérique",
-    period: "2018 — 2020",
-    blurb: "Crafted bespoke websites for cultural institutions across France.",
-  },
-  {
-    role: "Freelance Developer",
-    company: "Independent",
-    period: "2017 — 2018",
+    role: "Freelance Web Developer",
+    company: "TDOT Immigration",
+    period: "Past",
+    date: "Apr 2024 — July 2024",
     blurb:
-      "First clients, first lessons, first all-nighters. Worth every minute.",
+      "Led end-to-end development of a client immigration portal using Next.js and Supabase. Managed a team of 4 developers, delivering 2 weeks ahead of schedule. Designed UI/UX from scratch in Figma (35% increase in engagement) and built a custom admin panel.",
   },
+  
 ];
 
 export const PROJECTS = [
   {
-    title: "Forest Atlas",
-    tag: "WebGL · Data viz",
+    title: "TabSense",
+    tag: "AI · Extension",
     blurb:
-      "An interactive 3D atlas mapping global reforestation projects in real time.",
+      "AI-powered Chrome extension that intelligently organizes browser tabs using TypeScript, Spring, and Gemini API.",
     accent: "moss",
   },
   {
-    title: "Driftwood Studio",
-    tag: "SaaS · Design tool",
-    blurb: "A collaborative shader playground used by 4k+ creative coders.",
-    accent: "clay",
-  },
-  {
-    title: "Lumen Notes",
-    tag: "Product · Mobile",
-    blurb: "A calm, plain-text journaling app with biometric encryption.",
+    title: "UI Lab",
+    tag: "Library · UI",
+    blurb: "A developer-focused UI component platform providing reusable, production-ready components and structured docs.",
     accent: "leaf",
   },
   {
-    title: "Tideline",
-    tag: "Brand · Web",
-    blurb: "A poetic single-page site for an ocean-conservation non-profit.",
+    title: "Topology Visualizer",
+    tag: "3D · WebGL",
+    blurb: "Interactive 3D visualization tool for analyzing network latency built with Next.js and React Three Fiber.",
+    accent: "clay",
+  },
+  {
+    title: "NodeWeave",
+    tag: "Workflow · Tool",
+    blurb: "An infinite canvas workflow editor for building visual logic systems with draggable nodes and smart connections.",
     accent: "moss",
   },
 ];
