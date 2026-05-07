@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 import { SectionId, SKILLS, PROJECTS, EXPERIENCE } from "@/lib/portfolio";
-import { ContactForm } from "./ContactForm";
 import {
   Github,
   Linkedin,
@@ -83,44 +83,6 @@ export function ScreenContent({ active }: Props) {
     };
     window.addEventListener("macbook-scroll", handleScroll);
     return () => window.removeEventListener("macbook-scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const visibleHeights = new Map<string, number>();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          visibleHeights.set(entry.target.id, entry.intersectionRect.height);
-        });
-
-        // Find the section that occupies the most vertical space in the viewport
-        let maxVisibleHeight = 0;
-        let activeId = "";
-
-        visibleHeights.forEach((height, id) => {
-          if (height > maxVisibleHeight) {
-            maxVisibleHeight = height;
-            activeId = id.replace("section-", "");
-          }
-        });
-
-        if (activeId) {
-          window.dispatchEvent(
-            new CustomEvent("macbook-section", { detail: activeId }),
-          );
-        }
-      },
-      {
-        threshold: Array.from({ length: 21 }, (_, i) => i / 20),
-        root: containerRef.current,
-      },
-    );
-
-    const sections = containerRef.current?.querySelectorAll("[id^='section-']");
-    sections?.forEach((s) => observer.observe(s));
-
-    return () => observer.disconnect();
   }, []);
 
   return (
@@ -236,7 +198,7 @@ export function Home() {
                 <div className="absolute top-1/2 right-1/4 w-12 h-12 bg-black rounded-full z-30 flex items-center justify-center">
                   <div className="w-4 h-4 bg-white rounded-full" />
                 </div>
-                <div className="absolute bottom-1/4 right-1/3 w-8 h-8 bg-red-500 rounded-full z-30" />
+                <div className="absolute bottom-8 lg:bottom-1/4 right-1/3 w-8 h-8 bg-red-500 rounded-full z-30" />
               </div>
             </div>
             {/* Doodle scribble lines */}
@@ -340,12 +302,7 @@ export function About() {
             <div className="aspect-square bg-olive mb-4 border-2 border-black/10 overflow-hidden relative group-hover:border-yellow-accent transition-colors">
               <div className="absolute inset-0 paper-texture opacity-30" />
               {/* Abstract avatar placeholder */}
-              <div className="absolute inset-x-0 bottom-0 h-3/4 bg-blue-600 rounded-t-[100px] border-[6px] border-black" />
-              <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-24 h-24 bg-yellow-accent rounded-[40px] border-[6px] border-black shadow-lg">
-                <div className="absolute top-4 left-4 w-4 h-6 bg-black rounded-full" />
-                <div className="absolute top-4 right-4 w-4 h-6 bg-black rounded-full" />
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-8 h-4 border-b-4 border-black rounded-full" />
-              </div>
+              <img src="/varun-img.webp" alt="Varun Singh" className="w-full h-full object-cover" />
             </div>
             <div className="font-handwriting text-3xl text-center text-blue-700 font-bold rotate-[-2deg]">
               Varun Singh
@@ -423,13 +380,19 @@ export function Skills() {
             <div className="flex flex-wrap gap-3">
               {g.items.map((it, j) => (
                 <span
-                  key={it}
-                  className="bg-olive text-white px-3 py-1.5 rounded-md font-mono text-sm font-semibold shadow-md transform transition-transform hover:scale-110"
+                  key={it.name}
+                  className="bg-olive text-white pl-2 pr-3 py-1.5 rounded-md font-mono text-sm font-semibold shadow-md transform transition-transform hover:scale-110 inline-flex items-center gap-2"
                   style={{
                     transform: `rotate(${(j % 2 === 0 ? 1 : -1) * 2}deg)`,
                   }}
                 >
-                  {it}
+                  <span
+                    className="grid place-items-center h-5 w-5 rounded-sm bg-white/95 shadow-inner"
+                    aria-hidden="true"
+                  >
+                    <it.Icon className="h-3.5 w-3.5" style={{ color: it.color }} />
+                  </span>
+                  {it.name}
                 </span>
               ))}
             </div>
@@ -457,22 +420,22 @@ export function Experience() {
             <span>Built systems handling 300K–400K records efficiently</span>
           </div>
           <div className="flex items-start gap-3">
-            <span className="text-xl">📧</span>{" "}
-            <span>Designed email pipelines sending 100K+ emails daily</span>
-          </div>
-          <div className="flex items-start gap-3">
             <span className="text-xl">📈</span>{" "}
             <span>Improved user engagement by 35% through UI/UX redesign</span>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="text-xl">🚀</span>{" "}
-            <span>Reduced engineering workflow time by over 70%</span>
           </div>
           <div className="flex items-start gap-3">
             <span className="text-xl">🏢</span>{" "}
             <span>
               Delivered production-ready features in enterprise environments
             </span>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-xl">🚀</span>{" "}
+            <span>Reduced engineering workflow time by over 70%</span>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-xl">📧</span>{" "}
+            <span>Designed email pipelines sending 100K+ emails daily</span>
           </div>
         </div>
       </div>
@@ -522,7 +485,9 @@ export function Projects() {
         {PROJECTS.map((p, i) => (
           <motion.a
             key={p.title}
-            href="#"
+            href={p.link}
+            target="_blank"
+            rel="noopener noreferrer"
             className="polaroid hover:animate-jitter group block w-full"
             style={{ "--rand": i % 2 === 0 ? 0.8 : 0.2 } as React.CSSProperties}
           >
@@ -530,23 +495,22 @@ export function Projects() {
             <div
               className={`aspect-[4/3] bg-${p.accent} mb-4 border-4 border-olive overflow-hidden relative paper-texture`}
             >
-              {/* Abstract project visuals */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-24 h-24 bg-white/20 rounded-full blur-xl absolute" />
-                <span className="font-display text-4xl text-olive font-black mix-blend-overlay rotate-12 opacity-50">
-                  {p.title.split(" ")[0]}
-                </span>
+              <img
+                src={p.image}
+                alt={p.title}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
               </div>
-            </div>
-            <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
-                <h3 className="font-handwriting text-3xl text-blue-700 font-bold">
-                  {p.title}
-                </h3>
-                <div className="bg-yellow-accent text-olive text-[10px] font-bold font-mono px-2 py-1 border-2 border-olive rounded-sm rotate-[3deg]">
-                  {p.tag}
-                </div>
-              </div>
+                 <h3 className="font-handwriting text-3xl text-blue-700 font-bold">
+                   {p.title}
+                 </h3>
+                 <div className="bg-yellow-accent text-olive text-[10px] font-bold font-mono px-2 py-1 border-2 border-olive rounded-sm rotate-[3deg]">
+                   {p.tag}
+                 </div>
+               </div>
               <p className="text-olive/80 text-sm font-medium leading-snug mt-2">
                 {p.blurb}
               </p>
@@ -559,6 +523,51 @@ export function Projects() {
 }
 
 export function Contact() {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+
+    const SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const AUTOREPLY_ID = import.meta.env.VITE_EMAILJS_AUTOREPLY_TEMPLATE_ID;
+    const PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    try {
+      // 1. Notify Varun
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          from_phone: form.phone,
+          message: form.message,
+        },
+        PUBLIC_KEY
+      );
+
+      // 2. Auto-reply to the sender
+      await emailjs.send(
+        SERVICE_ID,
+        AUTOREPLY_ID,
+        {
+          to_name: form.name,
+          to_email: form.email,
+        },
+        PUBLIC_KEY
+      );
+
+      setStatus("success");
+      setForm({ name: "", email: "", phone: "", message: "" });
+    } catch (error) {
+      setStatus("error");
+    }
+  };
+
+
   return (
     <SectionShell eyebrow="Say hi" title="Contact">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 relative z-10">
@@ -611,42 +620,81 @@ export function Contact() {
 
         <div className="relative">
           <div
-            className="polaroid hover:animate-jitter w-full max-w-md ml-auto"
+            className="polaroid w-full max-w-md ml-auto"
             style={{ "--rand": 0.5 } as React.CSSProperties}
           >
             <div className="tape" />
             <h3 className="font-handwriting text-3xl text-olive font-bold mb-6 text-center border-b-2 border-dashed border-olive/20 pb-4">
               Drop a note 📝
             </h3>
-            <form className="space-y-6">
-              <div>
-                <input
-                  type="text"
-                  placeholder=" name"
-                  className="w-full bg-transparent border-0 border-b-2 border-olive/30 focus:border-blue-600 focus:ring-0 px-0 py-2 text-olive font-handwriting text-xl placeholder:text-olive/40"
-                />
+
+            {status === "success" ? (
+              <div className="text-center py-8">
+                <p className="text-4xl mb-3">✉️</p>
+                <p className="font-handwriting text-2xl text-blue-600 font-bold">Message sent!</p>
+                <p className="text-olive/70 text-sm mt-2">I'll get back to you soon.</p>
+                <button
+                  onClick={() => setStatus("idle")}
+                  className="mt-6 font-mono text-xs text-olive/50 underline hover:text-olive transition-colors"
+                >
+                  Send another
+                </button>
               </div>
-              <div>
-                <input
-                  type="email"
-                  placeholder=" email"
-                  className="w-full bg-transparent border-0 border-b-2 border-olive/30 focus:border-blue-600 focus:ring-0 px-0 py-2 text-olive font-handwriting text-xl placeholder:text-olive/40"
-                />
-              </div>
-              <div>
-                <textarea
-                  placeholder="tell me about your idea..."
-                  rows={3}
-                  className="w-full bg-transparent border-0 border-b-2 border-olive/30 focus:border-blue-600 focus:ring-0 px-0 py-2 text-olive font-handwriting text-xl placeholder:text-olive/40 resize-none"
-                ></textarea>
-              </div>
-              <button
-                type="button"
-                className="w-full bg-olive text-white font-bold font-mono py-3 rounded-md shadow-[4px_4px_0_0_#FFDE00] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#FFDE00] transition-all active:shadow-none active:translate-x-[4px] active:translate-y-[4px]"
-              >
-                SEND_MESSAGE()
-              </button>
-            </form>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <input
+                    type="text"
+                    required
+                    placeholder=" name"
+                    value={form.name}
+                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                    className="w-full bg-transparent border-0 border-b-2 border-olive/30 focus:border-blue-600 focus:ring-0 px-0 py-2 text-olive font-handwriting text-xl placeholder:text-olive/40 outline-none"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    required
+                    placeholder=" email"
+                    value={form.email}
+                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                    className="w-full bg-transparent border-0 border-b-2 border-olive/30 focus:border-blue-600 focus:ring-0 px-0 py-2 text-olive font-handwriting text-xl placeholder:text-olive/40 outline-none"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="tel"
+                    placeholder=" phone (optional)"
+                    value={form.phone}
+                    onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+                    className="w-full bg-transparent border-0 border-b-2 border-olive/30 focus:border-blue-600 focus:ring-0 px-0 py-2 text-olive font-handwriting text-xl placeholder:text-olive/40 outline-none"
+                  />
+                </div>
+                <div>
+                  <textarea
+                    required
+                    placeholder="tell me about your idea..."
+                    rows={3}
+                    value={form.message}
+                    onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                    className="w-full bg-transparent border-0 border-b-2 border-olive/30 focus:border-blue-600 focus:ring-0 px-0 py-2 text-olive font-handwriting text-xl placeholder:text-olive/40 resize-none outline-none"
+                  />
+                </div>
+
+                {status === "error" && (
+                  <p className="text-red-500 font-mono text-xs">Something went wrong. Try again.</p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="w-full bg-olive text-white font-bold font-mono py-3 rounded-md shadow-[4px_4px_0_0_#FFDE00] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#FFDE00] transition-all active:shadow-none active:translate-x-[4px] active:translate-y-[4px] disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-x-0 disabled:translate-y-0"
+                >
+                  {status === "loading" ? "SENDING..." : "SEND_MESSAGE()"}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>

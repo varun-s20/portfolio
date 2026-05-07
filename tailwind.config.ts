@@ -17,7 +17,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Outfit"', "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ['"Bricolage Grotesque"', '"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
         sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
         handwriting: ['"Caveat"', "cursive"],

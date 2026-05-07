@@ -47,25 +47,15 @@ const Index = () => {
   const innerPRef = useRef(0);
   // Ref-gated active section — avoids re-rendering Navbar on every scroll tick
   const activeSectionRef = useRef<SectionId>("home");
-  // Pre-measured section start positions as fractions of maxScroll (measured at scrollTop=0)
-  const sectionFractionsRef = useRef<{ id: SectionId; fraction: number }[]>([]);
+  // Pre-measured section top positions in pixels relative to fsEl content
+  const sectionTopsRef = useRef<{ id: SectionId; top: number }[]>([]);
 
   const totalSlices =
     INTRO_SLICES + STORY_SLICES + SECTIONS.length * SECTION_SLICES;
 
-  // Sync active section from macbook inner scroll events
-  useEffect(() => {
-    const handleMacbookSection = (e: any) => {
-      setActiveSection(e.detail);
-    };
-    window.addEventListener("macbook-section", handleMacbookSection);
-    return () =>
-      window.removeEventListener("macbook-section", handleMacbookSection);
-  }, []);
-
   // Pre-measure section positions once content is rendered.
   // We reset scrollTop to 0 so all measurements are from the content origin,
-  // then store each section's start as a fraction of maxScroll.
+  // then store each section's absolute top in pixels.
   useEffect(() => {
     const measure = () => {
       const fsEl = fsContainerRef.current;
@@ -77,20 +67,23 @@ const Index = () => {
       fsEl.scrollTop = 0;
       const fsTop = fsEl.getBoundingClientRect().top;
 
-      sectionFractionsRef.current = SECTIONS.map((s) => {
+      sectionTopsRef.current = SECTIONS.map((s) => {
         const sEl = fsEl.querySelector(`#fs-${s.id}`) as HTMLElement | null;
-        const absTop = sEl ? sEl.getBoundingClientRect().top - fsTop : 0;
-        return { id: s.id, fraction: absTop / maxScroll };
+        const top = sEl ? sEl.getBoundingClientRect().top - fsTop : 0;
+        return { id: s.id, top };
       });
 
       fsEl.scrollTop = saved;
     };
 
-    // Delay to let content fully render before measuring
+    // Re-measure once content is laid out; also after window load (images, fonts)
     const timer = setTimeout(measure, 300);
+    const onLoad = () => measure();
+    window.addEventListener("load", onLoad);
     window.addEventListener("resize", measure);
     return () => {
       clearTimeout(timer);
+      window.removeEventListener("load", onLoad);
       window.removeEventListener("resize", measure);
     };
   }, []);
@@ -141,19 +134,18 @@ const Index = () => {
       const fsEl = fsContainerRef.current;
       if (fsEl) {
         const maxScroll = fsEl.scrollHeight - fsEl.clientHeight;
-        fsEl.scrollTop = innerP * maxScroll;
+        const scrollTop = innerP * maxScroll;
+        fsEl.scrollTop = scrollTop;
 
-        // Determine active section using pre-measured fractions — pure math,
-        // no layout queries. Section is active when the scroll point (innerP
-        // offset by 30% of the viewport relative to total content) has passed
-        // the section's start fraction.
-        const fractions = sectionFractionsRef.current;
-        if (fractions.length > 0 && maxScroll > 0) {
-          // How much of the content does 30% of the viewport represent?
-          const viewportFraction = (fsEl.clientHeight * 0.3) / maxScroll;
-          let nextSection: SectionId = fractions[0]?.id ?? "home";
-          fractions.forEach(({ id, fraction }) => {
-            if (innerP >= fraction - viewportFraction) nextSection = id;
+        // Determine active section by which one contains the viewport center.
+        // A section is active once the middle of the viewport has crossed its
+        // top — that matches the user's perception of "this section is on screen".
+        const tops = sectionTopsRef.current;
+        if (tops.length > 0 && maxScroll > 0) {
+          const scrollCenter = scrollTop + fsEl.clientHeight / 2;
+          let nextSection: SectionId = tops[0]?.id ?? "home";
+          tops.forEach(({ id, top }) => {
+            if (scrollCenter >= top) nextSection = id;
           });
           if (nextSection !== activeSectionRef.current) {
             activeSectionRef.current = nextSection;
@@ -172,7 +164,6 @@ const Index = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [totalSlices]);
-
 
   // Navbar click handler: in fullscreen mode drive outer scroll to right section
   useEffect(() => {
@@ -202,15 +193,19 @@ const Index = () => {
         const sectionRect = sectionEl.getBoundingClientRect();
         const fsRect = fsEl.getBoundingClientRect();
         // Distance from top of fs content (accounting for current scroll)
-        const absoluteSectionTop = sectionRect.top - fsRect.top + fsEl.scrollTop;
+        const absoluteSectionTop =
+          sectionRect.top - fsRect.top + fsEl.scrollTop;
 
         const maxFsScroll = fsEl.scrollHeight - fsEl.clientHeight;
-        const targetInnerP = maxFsScroll > 0
-          ? Math.min(absoluteSectionTop, maxFsScroll) / maxFsScroll
-          : 0;
+        const targetInnerP =
+          maxFsScroll > 0
+            ? Math.min(absoluteSectionTop, maxFsScroll) / maxFsScroll
+            : 0;
 
         const targetSliceProgress =
-          INTRO_SLICES + STORY_SLICES + targetInnerP * SECTIONS.length * SECTION_SLICES;
+          INTRO_SLICES +
+          STORY_SLICES +
+          targetInnerP * SECTIONS.length * SECTION_SLICES;
         const targetProgress = targetSliceProgress / totalSlices;
         window.scrollTo({
           top: el.offsetTop + targetProgress * total,
@@ -271,7 +266,10 @@ const Index = () => {
           {/* ── 3D MacBook layer ── fades out when fullscreen */}
           <div
             className="absolute inset-0 z-10 transition-opacity duration-700"
-            style={{ opacity: isFullScreen ? 0 : 1, pointerEvents: isFullScreen ? "none" : "auto" }}
+            style={{
+              opacity: isFullScreen ? 0 : 1,
+              pointerEvents: isFullScreen ? "none" : "auto",
+            }}
           >
             <Suspense
               fallback={
@@ -293,7 +291,10 @@ const Index = () => {
           <div
             ref={fsContainerRef}
             className="absolute inset-0 z-20 overflow-hidden transition-opacity duration-700"
-            style={{ opacity: isFullScreen ? 1 : 0, pointerEvents: isFullScreen ? "auto" : "none" }}
+            style={{
+              opacity: isFullScreen ? 1 : 0,
+              pointerEvents: isFullScreen ? "auto" : "none",
+            }}
           >
             <div className="flex flex-col w-full bg-olive-paper text-white paper-texture pt-16">
               <section id="fs-home">
